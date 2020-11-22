@@ -5,7 +5,7 @@ pipeline {
   }
   environment {
     registry = "josianetsh/decla-pipeline"
-    registryCredential = 'dockerUserID'
+    registryCredential = 'josianetsh'
   }
   stages {
     stage('Build'){
@@ -28,5 +28,14 @@ pipeline {
         }
       }
     }
+    stage('Deploy our image') {
+      steps{
+        script {
+          docker.withRegistry( '', registryCredential ) {
+            dockerImage.push()
+         }
+      }
+    }
   }
+ }
 }
