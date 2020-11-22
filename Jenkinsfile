@@ -3,6 +3,10 @@ pipeline {
   tools {
     maven 'M2_HOME'
   }
+  environment {
+    registry = "josianetsh/decla-pipeline"
+    registryCredential = 'dockerUserID'
+  }
   stages {
     stage('Build'){
       steps {
@@ -17,16 +21,11 @@ pipeline {
       sh 'mvn test'
       }
     }
-    stage('Deploy'){
-      steps {
-      echo "deploy step"
-        sleep 10
-      }
-    }
     stage('docker'){
       steps {
-      echo "image step"
-        sleep 10
+        script {
+          docker.build registry + ":$BUILD_NUMBER"
+        }
       }
     }
   }
